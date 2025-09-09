@@ -1,0 +1,640 @@
+version: 1
+namespaces:
+  fibo-fbc-fi-fi: "https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/"
+  fibo-fnd-acc-cur: "https://spec.edmcouncil.org/fibo/ontology/FND/Accounting/CurrencyAmount/"
+  fibo-fbc-pas-cust: "https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/Customers/"
+  fibo-be-le: "https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LegalEntities/"
+  schema: "https://schema.org/"
+  chase: "https://example.com/ontology/chase/"
+  ex: "https://example.com/id/"
+
+ontologies:
+  - id: "urn:ontology:fibo-core"
+    label: "FIBO Core"
+    type: "Ontology"
+    uri: "https://spec.edmcouncil.org/fibo/"
+    domains: ["RetailBanking", "CreditCards", "Auto", "HomeLending", "Investments"]
+  - id: "urn:ontology:chase-core"
+    label: "Chase Core Ontology"
+    type: "Ontology"
+    uri: "https://example.com/ontology/chase/core"
+    extends: ["urn:ontology:fibo-core"]
+  - id: "urn:ontology:chase-ccb"
+    label: "Chase CCB Ontology"
+    type: "Ontology"
+    uri: "https://example.com/ontology/chase/ccb"
+    extends: ["urn:ontology:chase-core"]
+    namespaceOf: ["urn:org:CCB"]
+  - id: "urn:ontology:chase-credit"
+    label: "Chase Credit Ontology"
+    type: "Ontology"
+    uri: "https://example.com/ontology/chase/credit"
+    extends: ["urn:ontology:chase-core"]
+    namespaceOf: ["urn:org:Credit"]
+  - id: "urn:ontology:chase-deposit"
+    label: "Chase Deposit Ontology"
+    type: "Ontology"
+    uri: "https://example.com/ontology/chase/deposit"
+    extends: ["urn:ontology:chase-core"]
+    namespaceOf: ["urn:org:Deposit"]
+  - id: "urn:ontology:chase-auto"
+    label: "Chase Auto Ontology"
+    type: "Ontology"
+    uri: "https://example.com/ontology/chase/auto"
+    extends: ["urn:ontology:chase-core"]
+    namespaceOf: ["urn:org:Auto"]
+  - id: "urn:ontology:chase-home"
+    label: "Chase Home Lending Ontology"
+    type: "Ontology"
+    uri: "https://example.com/ontology/chase/home"
+    extends: ["urn:ontology:chase-core"]
+    namespaceOf: ["urn:org:HomeLending"]
+  - id: "urn:ontology:chase-invest"
+    label: "Chase Investment Ontology"
+    type: "Ontology"
+    uri: "https://example.com/ontology/chase/invest"
+    extends: ["urn:ontology:chase-core"]
+    namespaceOf: ["urn:org:Investment"]
+
+organizations:
+  - id: "urn:org:CCB"
+    label: "Consumer & Community Banking"
+    fibo_alignment: { class: "fibo-be-le:LegalEntity" }
+    sub_orgs: ["urn:org:Deposit", "urn:org:Credit", "urn:org:Auto", "urn:org:HomeLending", "urn:org:Investment"]
+  - id: "urn:org:Deposit"
+    label: "Deposit"
+    fibo_alignment: { class: "fibo-be-le:LegalEntity" }
+  - id: "urn:org:Credit"
+    label: "Credit"
+    fibo_alignment: { class: "fibo-be-le:LegalEntity" }
+  - id: "urn:org:Auto"
+    label: "Auto"
+    fibo_alignment: { class: "fibo-be-le:LegalEntity" }
+  - id: "urn:org:HomeLending"
+    label: "Home Lending"
+    fibo_alignment: { class: "fibo-be-le:LegalEntity" }
+  - id: "urn:org:Investment"
+    label: "Investment (J.P. Morgan Wealth Mgmt)"
+    fibo_alignment: { class: "fibo-be-le:LegalEntity" }
+
+entities:
+  customers:
+    class: "fibo-fbc-pas-cust:IndividualCustomer"
+    nodes:
+      - id: "urn:customer:example"
+        label: "Customer (example)"
+        keys: ["customer_id"]
+        attributes:
+          - name: "customer_id"
+            datatype: "xsd:string"
+          - name: "name"
+            datatype: "xsd:string"
+          - name: "email"
+            datatype: "xsd:string"
+        relationships:
+          - type: "ownsAccount"
+            to: "urn:account:*"
+            fibo_property: "fibo-fbc-fi-fi:isOwnedBy"
+
+  accounts:
+    class: "fibo-fbc-fi-fi:DepositoryAccount"
+    note: "Accounts are created by products and owned by one or more customers."
+    nodes:
+      - id: "urn:account:deposit"
+        label: "Deposit Account"
+        created_by_product: ["urn:product:deposit:*"]
+        owned_by: ["urn:customer:*"]
+      - id: "urn:account:credit_card"
+        label: "Credit Card Account"
+        created_by_product: ["urn:product:credit:*"]
+        owned_by: ["urn:customer:*"]
+
+financial_products:
+  deposit:  # from Checking & Savings product pages
+    org: "urn:org:Deposit"
+    families:
+      checking:  # Checking products
+        - id: "urn:product:deposit:total-checking"
+          label: "Chase Total Checking®"
+          source: "turn1view0"
+        - id: "urn:product:deposit:secure-banking"
+          label: "Chase Secure Banking℠"
+          source: "turn1view0"
+        - id: "urn:product:deposit:premier-plus-checking"
+          label: "Chase Premier Plus Checking℠"
+          source: "turn1view0"
+        - id: "urn:product:deposit:college-checking"
+          label: "Chase College Checking℠"
+          source: "turn1view0"
+        - id: "urn:product:deposit:high-school-checking"
+          label: "Chase High School Checking℠"
+          source: "turn1view0"
+        - id: "urn:product:deposit:first-banking"
+          label: "Chase First Banking℠"
+          source: "turn1view0"
+        - id: "urn:product:deposit:sapphire-banking"
+          label: "Chase Sapphire® Banking"
+          source: "turn1view0"
+        - id: "urn:product:deposit:private-client-checking"
+          label: "Chase Private Client Checking℠"
+          source: "turn1view0"
+      savings_and_cds:
+        - id: "urn:product:deposit:chase-savings"
+          label: "Chase Savings℠"
+          source: "turn2view0"
+        - id: "urn:product:deposit:premier-savings"
+          label: "Chase Premier Savings℠"
+          source: "turn2view0"
+        - id: "urn:product:deposit:private-client-savings"
+          label: "Chase Private Client Savings℠"
+          source: "turn2view0"
+        - id: "urn:product:deposit:cd"
+          label: "Certificate of Deposit (CD)"
+          source: "turn2view0"
+
+  credit:
+    org: "urn:org:Credit"
+    families:  # families capture many SKUs; see Chase card catalog pages
+      sapphire:
+        - "Chase Sapphire Preferred®"
+        - "Chase Sapphire Reserve®"
+        source: ["turn0search14","turn0search8"]
+      freedom:
+        - "Chase Freedom Unlimited®"
+        - "Chase Freedom Flex®"
+        - "Chase Freedom Rise℠"
+        source: ["turn0search14","turn0search8"]
+      slate:
+        - "Slate Edge℠"
+        source: ["turn0search14"]
+      cobrands_travel_and_store:
+        - "United℠ family"
+        - "Southwest Rapid Rewards® family"
+        - "IHG One Rewards"
+        - "Marriott Bonvoy®"
+        - "British Airways Visa Signature®"
+        - "Aeroplan®"
+        - "World of Hyatt"
+        - "Disney® Visa"
+        - "Amazon Visa / Prime Visa"
+        - "DoorDash Rewards Mastercard®"
+        - "Instacart Mastercard®"
+        source: ["turn0search14","turn0search2","turn0search8"]
+    other_credit_products:
+      - id: "urn:product:credit:my-chase-loan"
+        label: "My Chase Loan® (loan off card credit line)"
+        source: ["turn3search1","turn3search3"]
+
+  auto:
+    org: "urn:org:Auto"
+    products:
+      - id: "urn:product:auto:auto-loan"
+        label: "Auto Loan (new/used; dealer financing)"
+        source: ["turn0search9","turn0search15"]
+
+  home_lending:
+    org: "urn:org:HomeLending"
+    products:
+      - id: "urn:product:home:conventional-mortgage"
+        label: "Conventional Mortgage (fixed/ARM)"
+        source: ["turn3search4","turn3search6"]
+      - id: "urn:product:home:jumbo-mortgage"
+        label: "Jumbo Mortgage"
+        source: ["turn3search4"]
+      - id: "urn:product:home:fha-mortgage"
+        label: "FHA Mortgage"
+        source: ["turn3search10","turn3search0","turn3search18"]
+      - id: "urn:product:home:va-mortgage"
+        label: "VA Mortgage"
+        source: ["turn3search16","turn3search6"]
+      - id: "urn:product:home:dreameker"
+        label: "Chase DreaMaker℠ Mortgage"
+        source: ["turn3search10"]
+      - id: "urn:product:home:heloc"
+        label: "Home Equity Line of Credit (HELOC)"
+        source: ["turn0search4","turn0search10"]
+      - id: "urn:product:home:cashout-refi"
+        label: "Cash-Out Refinance"
+        source: ["turn0search4"]
+
+  investment:
+    org: "urn:org:Investment"
+    products:
+      - id: "urn:product:invest:self-directed"
+        label: "J.P. Morgan Self-Directed Investing"
+        source: ["turn0search17"]
+      - id: "urn:product:invest:automated"
+        label: "J.P. Morgan Automated Investing"
+        source: ["turn0search17"]
+      - id: "urn:product:invest:advisor"
+        label: "J.P. Morgan Personal Advisor"
+        source: ["turn0search11","turn0search5"]
+
+events:
+  taxonomy:
+    - id: "urn:event:click"
+      label: "Click"
+      attributes: ["timestamp","customer_id","session_id","app_id","element","page","referrer"]
+    - id: "urn:event:view"
+      label: "View"
+      attributes: ["timestamp","customer_id","session_id","app_id","page","duration_ms"]
+    - id: "urn:event:transaction"
+      label: "Transaction"
+      subtypes:
+        - { id: "urn:event:txn:deposit", org: "urn:org:Deposit", label: "Deposit Transaction" }
+        - { id: "urn:event:txn:credit", org: "urn:org:Credit", label: "Credit Card Transaction" }
+        - { id: "urn:event:txn:auto", org: "urn:org:Auto", label: "Auto Payment" }
+        - { id: "urn:event:txn:home", org: "urn:org:HomeLending", label: "Mortgage Payment" }
+        - { id: "urn:event:txn:invest", org: "urn:org:Investment", label: "Trade/Transfer" }
+      attributes: ["timestamp","account_id","amount","currency","mcc","channel"]
+    - id: "urn:event:application"
+      label: "Application"
+      subtypes:
+        - { id: "urn:event:app:credit", org: "urn:org:Credit", label: "Credit Card Application" }
+        - { id: "urn:event:app:auto", org: "urn:org:Auto", label: "Auto Loan Application" }
+        - { id: "urn:event:app:home", org: "urn:org:HomeLending", label: "Mortgage/HELOC Application" }
+        - { id: "urn:event:app:deposit", org: "urn:org:Deposit", label: "Deposit Account Opening" }
+      attributes: ["timestamp","customer_id","product_id","decision","scorecards","channel"]
+
+software_applications:
+  - id: "urn:app:ccb:online-banking"
+    label: "Chase Online Banking"
+    org: "urn:org:CCB"
+    stack: ["web","mobile"]
+    data_models: ["urn:dm:ccb:customer360","urn:dm:ccb:transactions"]
+  - id: "urn:app:ccb:mobile-app"
+    label: "Chase Mobile® App"
+    org: "urn:org:CCB"
+    stack: ["iOS","Android"]
+    data_models: ["urn:dm:ccb:customer360","urn:dm:ccb:engagement"]
+
+data_models:
+  - id: "urn:dm:ccb:customer360"
+    label: "Customer 360"
+    org: "urn:org:CCB"
+    aligns_to:
+      fibo_classes: ["fibo-fbc-pas-cust:IndividualCustomer","fibo-fbc-fi-fi:DepositoryAccount"]
+    datasets: ["urn:ds:core:customers","urn:ds:core:accounts","urn:ds:core:relationships"]
+  - id: "urn:dm:ccb:transactions"
+    label: "Transactions"
+    org: "urn:org:CCB"
+    aligns_to:
+      fibo_classes: ["fibo-fnd-acc-cur:MonetaryAmount","fibo-fbc-fi-fi:FinancialTransaction"]
+    datasets: ["urn:ds:core:transactions"]
+  - id: "urn:dm:ccb:engagement"
+    label: "Digital Engagement"
+    org: "urn:org:CCB"
+    datasets: ["urn:ds:events:clicks","urn:ds:events:views"]
+
+datasets:
+  - id: "urn:ds:core:customers"
+    label: "customers"
+    domain: "RetailBanking"
+    org: "urn:org:CCB"
+    application: "urn:app:ccb:online-banking"
+    data_elements:
+      - "urn:de:customers:customer_id"
+      - "urn:de:customers:name"
+      - "urn:de:customers:email"
+      - "urn:de:customers:created_at"
+    keys: ["urn:de:customers:customer_id"]
+  - id: "urn:ds:core:accounts"
+    label: "accounts"
+    domain: "RetailBanking"
+    org: "urn:org:CCB"
+    application: "urn:app:ccb:online-banking"
+    data_elements:
+      - "urn:de:accounts:account_id"
+      - "urn:de:accounts:customer_id"
+      - "urn:de:accounts:product_id"
+      - "urn:de:accounts:opened_at"
+      - "urn:de:accounts:status"
+    keys: ["urn:de:accounts:account_id"]
+  - id: "urn:ds:core:transactions"
+    label: "transactions"
+    domain: "RetailBanking"
+    org: "urn:org:CCB"
+    application: "urn:app:ccb:online-banking"
+    data_elements:
+      - "urn:de:txns:transaction_id"
+      - "urn:de:txns:account_id"
+      - "urn:de:txns:amount"
+      - "urn:de:txns:currency"
+      - "urn:de:txns:type"
+      - "urn:de:txns:org_subtype"
+      - "urn:de:txns:timestamp"
+      - "urn:de:txns:description"
+    keys: ["urn:de:txns:transaction_id"]
+  - id: "urn:ds:events:clicks"
+    label: "click_events"
+    org: "urn:org:CCB"
+    data_elements:
+      - "urn:de:clicks:event_id"
+      - "urn:de:clicks:customer_id"
+      - "urn:de:clicks:session_id"
+      - "urn:de:clicks:app_id"
+      - "urn:de:clicks:element"
+      - "urn:de:clicks:page"
+      - "urn:de:clicks:referrer"
+      - "urn:de:clicks:timestamp"
+    keys: ["urn:de:clicks:event_id"]
+  - id: "urn:ds:events:views"
+    label: "view_events"
+    org: "urn:org:CCB"
+    data_elements:
+      - "urn:de:views:event_id"
+      - "urn:de:views:customer_id"
+      - "urn:de:views:session_id"
+      - "urn:de:views:app_id"
+      - "urn:de:views:page"
+      - "urn:de:views:duration_ms"
+      - "urn:de:views:timestamp"
+    keys: ["urn:de:views:event_id"]
+
+data_elements:
+  # customers
+  - id: "urn:de:customers:customer_id"
+    dataset: "urn:ds:core:customers"
+    physical_type: "uuid"
+    business_term: "urn:bt:CustomerIdentifier"
+    fibo_alignment: { property: "schema:identifier" }
+  - id: "urn:de:customers:name"
+    dataset: "urn:ds:core:customers"
+    physical_type: "varchar(200)"
+    business_term: "urn:bt:CustomerName"
+    fibo_alignment: { property: "schema:name" }
+  - id: "urn:de:customers:email"
+    dataset: "urn:ds:core:customers"
+    physical_type: "varchar(320)"
+    business_term: "urn:bt:EmailAddress"
+    fibo_alignment: { property: "schema:email" }
+  - id: "urn:de:customers:created_at"
+    dataset: "urn:ds:core:customers"
+    physical_type: "timestamp"
+    business_term: "urn:bt:CustomerCreatedAt"
+
+  # accounts
+  - id: "urn:de:accounts:account_id"
+    dataset: "urn:ds:core:accounts"
+    physical_type: "varchar(64)"
+    business_term: "urn:bt:AccountIdentifier"
+    fibo_alignment: { property: "fibo-fbc-fi-fi:hasAccountIdentifier" }
+  - id: "urn:de:accounts:customer_id"
+    dataset: "urn:ds:core:accounts"
+    physical_type: "uuid"
+    business_term: "urn:bt:CustomerIdentifier"
+    relationship_hints:
+      - { joins_to: "urn:de:customers:customer_id", reason: "name-match, fk convention" }
+  - id: "urn:de:accounts:product_id"
+    dataset: "urn:ds:core:accounts"
+    physical_type: "varchar(128)"
+    business_term: "urn:bt:ProductIdentifier"
+  - id: "urn:de:accounts:opened_at"
+    dataset: "urn:ds:core:accounts"
+    physical_type: "timestamp"
+    business_term: "urn:bt:AccountOpenDate"
+  - id: "urn:de:accounts:status"
+    dataset: "urn:ds:core:accounts"
+    physical_type: "varchar(32)"
+    business_term: "urn:bt:AccountStatus"
+    valid_values_ref: "urn:enum:account_status"
+
+  # transactions
+  - id: "urn:de:txns:transaction_id"
+    dataset: "urn:ds:core:transactions"
+    physical_type: "varchar(64)"
+    business_term: "urn:bt:TransactionIdentifier"
+    fibo_alignment: { property: "schema:identifier" }
+  - id: "urn:de:txns:account_id"
+    dataset: "urn:ds:core:transactions"
+    physical_type: "varchar(64)"
+    business_term: "urn:bt:AccountIdentifier"
+    relationship_hints:
+      - { joins_to: "urn:de:accounts:account_id", reason: "fk convention" }
+  - id: "urn:de:txns:amount"
+    dataset: "urn:ds:core:transactions"
+    physical_type: "decimal(18,2)"
+    business_term: "urn:bt:MonetaryAmount"
+    fibo_alignment: { property: "fibo-fnd-acc-cur:hasMonetaryAmount" }
+  - id: "urn:de:txns:currency"
+    dataset: "urn:ds:core:transactions"
+    physical_type: "char(3)"
+    business_term: "urn:bt:CurrencyCode"
+    valid_values_ref: "urn:enum:iso4217"
+    fibo_alignment: { property: "fibo-fnd-acc-cur:hasCurrency" }
+  - id: "urn:de:txns:type"
+    dataset: "urn:ds:core:transactions"
+    physical_type: "varchar(64)"
+    business_term: "urn:bt:TransactionType"
+    valid_values_ref: "urn:enum:txn_types"
+  - id: "urn:de:txns:org_subtype"
+    dataset: "urn:ds:core:transactions"
+    physical_type: "varchar(64)"
+    business_term: "urn:bt:OrgTransactionSubtype"
+    valid_values_ref: "urn:enum:org_txn_subtypes"
+  - id: "urn:de:txns:timestamp"
+    dataset: "urn:ds:core:transactions"
+    physical_type: "timestamp"
+    business_term: "urn:bt:EventTimestamp"
+  - id: "urn:de:txns:description"
+    dataset: "urn:ds:core:transactions"
+    physical_type: "varchar(512)"
+    business_term: "urn:bt:TransactionDescription"
+
+business_terms:
+  - id: "urn:bt:CustomerIdentifier"
+    label: "Customer Identifier"
+    definitions:
+      - "A persistent identifier for a customer; may be UUID."
+    aligns_to_ontology:
+      - { ontology: "urn:ontology:fibo-core", class: "fibo-fbc-pas-cust:IndividualCustomer" }
+      - { ontology: "urn:ontology:chase-ccb", term: "chase:customerId" }
+  - id: "urn:bt:AccountIdentifier"
+    label: "Account Identifier"
+    aligns_to_ontology:
+      - { ontology: "urn:ontology:fibo-core", class: "fibo-fbc-fi-fi:DepositoryAccount" }
+  - id: "urn:bt:ProductIdentifier"
+    label: "Product Identifier"
+  - id: "urn:bt:MonetaryAmount"
+    label: "Monetary Amount"
+    aligns_to_ontology:
+      - { ontology: "urn:ontology:fibo-core", property: "fibo-fnd-acc-cur:hasMonetaryAmount" }
+  - id: "urn:bt:CurrencyCode"
+    label: "Currency Code (ISO 4217)"
+    aligns_to_ontology:
+      - { ontology: "urn:ontology:fibo-core", property: "fibo-fnd-acc-cur:hasCurrency" }
+  - id: "urn:bt:AccountOpenDate"
+    label: "Account Open Date"
+  - id: "urn:bt:TransactionIdentifier"
+    label: "Transaction Identifier"
+  - id: "urn:bt:TransactionType"
+    label: "Transaction Type"
+  - id: "urn:bt:OrgTransactionSubtype"
+    label: "Org Transaction Subtype"
+  - id: "urn:bt:CustomerName"
+    label: "Customer Name"
+  - id: "urn:bt:EmailAddress"
+    label: "Email Address"
+  - id: "urn:bt:EventTimestamp"
+    label: "Event Timestamp"
+  - id: "urn:bt:TransactionDescription"
+    label: "Transaction Description"
+  - id: "urn:bt:AccountStatus"
+    label: "Account Status"
+    ties_to_valid_values: "urn:enum:account_status"
+
+valid_values:
+  - id: "urn:enum:account_status"
+    label: "Account Status"
+    sql_expression: "SELECT DISTINCT status FROM accounts"
+    glossary_term_group: "Account Status"
+    values_example: ["active","closed","pending","frozen"]
+  - id: "urn:enum:iso4217"
+    label: "ISO 4217 Currency"
+    source: "ISO 4217 standard"
+  - id: "urn:enum:txn_types"
+    label: "Transaction Types"
+    values_example: ["debit","credit","fee","refund","interest","payment"]
+  - id: "urn:enum:org_txn_subtypes"
+    label: "Org-specific Transaction Subtypes"
+    mapping:
+      Deposit: ["cash_deposit","atm_withdrawal","zelle_send","zelle_receive","check_deposit"]
+      Credit: ["authorization","capture","statement","payment","fee"]
+      Auto: ["auto_payment","late_fee","principal","interest"]
+      HomeLending: ["mortgage_payment","escrow","fee","principal","interest"]
+      Investment: ["buy","sell","dividend","transfer_in","transfer_out"]
+
+metrics:
+  - id: "urn:metric:customer:total_accounts"
+    label: "Total Accounts per Customer"
+    applies_to: ["urn:ds:core:accounts"]
+    expression_sql: "SELECT customer_id, COUNT(*) AS total_accounts FROM accounts GROUP BY 1"
+    fibo_alignment: { class: "fibo-fbc-fi-fi:DepositoryAccount" }
+  - id: "urn:metric:customer:total_spend_cc"
+    label: "Total Credit Card Spend (30d)"
+    applies_to: ["urn:ds:core:transactions"]
+    expression_sql: |
+      SELECT a.customer_id, SUM(CASE WHEN t.type='debit' THEN t.amount ELSE 0 END) AS spend_30d
+      FROM accounts a JOIN transactions t ON a.account_id=t.account_id
+      WHERE t.org_subtype IN ('authorization','capture','statement')
+        AND t.timestamp >= CURRENT_DATE - INTERVAL '30 days'
+      GROUP BY a.customer_id
+
+joins:
+  # Inference-friendly join catalog (column-level)
+  - id: "urn:join:customer_accounts"
+    left: "urn:de:customers:customer_id"
+    right: "urn:de:accounts:customer_id"
+    rationale: ["exact name match", "foreign key convention"]
+    confidence: 0.98
+  - id: "urn:join:account_transactions"
+    left: "urn:de:accounts:account_id"
+    right: "urn:de:txns:account_id"
+    rationale: ["fk convention","observed in query logs"]
+    confidence: 0.99
+
+qa_pairs:
+  - id: "urn:qa:customer:accounts_last_month"
+    question: "How many customers opened an account last month?"
+    sql: |
+      SELECT COUNT(DISTINCT a.customer_id)
+      FROM accounts a
+      WHERE date_trunc('month', a.opened_at) = date_trunc('month', CURRENT_DATE - INTERVAL '1 month');
+    verified: true
+    uses_datasets: ["urn:ds:core:accounts"]
+
+business_rules:
+  - id: "urn:rule:customer_has_active_account"
+    label: "Customer must have at least one active account"
+    expression_sql: |
+      EXISTS (
+        SELECT 1 FROM accounts a
+        WHERE a.customer_id = customers.customer_id AND a.status='active'
+      )
+    applies_to: "urn:ds:core:customers"
+  - id: "urn:rule:txn_currency_required"
+    label: "Transactions must have currency"
+    expression_sql: "currency IS NOT NULL"
+    applies_to: "urn:ds:core:transactions"
+
+serialization:
+  shacl_shapes:
+    - id: "urn:shape:customer"
+      target_class: "schema:Customer"
+      required_properties:
+        - "schema:identifier"
+        - "schema:name"
+      optional_properties:
+        - "schema:email"
+  r2rml_mappings:
+    - id: "urn:r2rml:transactions"
+      logical_table: "transactions"
+      subject_template: "https://example.com/id/transaction/{transaction_id}"
+      class: "fibo-fbc-fi-fi:FinancialTransaction"
+      predicate_object_maps:
+        - predicate: "fibo-fnd-acc-cur:hasMonetaryAmount"
+          column: "amount"
+          datatype: "xsd:decimal"
+        - predicate: "fibo-fnd-acc-cur:hasCurrency"
+          column: "currency"
+        - predicate: "schema:dateCreated"
+          column: "timestamp"
+          datatype: "xsd:dateTime"
+        - predicate: "fibo-fbc-fi-fi:isPostedTo"
+          parent_triples_map: "urn:r2rml:accounts"
+          join:
+            child: "account_id"
+            parent: "account_id"
+    - id: "urn:r2rml:accounts"
+      logical_table: "accounts"
+      subject_template: "https://example.com/id/account/{account_id}"
+      class: "fibo-fbc-fi-fi:DepositoryAccount"
+      predicate_object_maps:
+        - predicate: "schema:dateCreated"
+          column: "opened_at"
+          datatype: "xsd:dateTime"
+        - predicate: "fibo-fbc-fi-fi:isOwnedBy"
+          parent_triples_map: "urn:r2rml:customers"
+          join:
+            child: "customer_id"
+            parent: "customer_id"
+    - id: "urn:r2rml:customers"
+      logical_table: "customers"
+      subject_template: "https://example.com/id/customer/{customer_id}"
+      class: "fibo-fbc-pas-cust:IndividualCustomer"
+      predicate_object_maps:
+        - predicate: "schema:name"
+          column: "name"
+        - predicate: "schema:email"
+          column: "email"
+
+traversal_examples:
+  # Demonstrates traversing from a physical data element up to ontology concepts
+  - start: "urn:de:txns:amount"
+    steps:
+      - relation: "isDefinedBy"
+        to: "urn:bt:MonetaryAmount"
+      - relation: "alignsToOntology"
+        to: "urn:ontology:fibo-core"
+      - relation: "class/property"
+        to: "fibo-fnd-acc-cur:hasMonetaryAmount"
+  - start: "urn:de:accounts:status"
+    steps:
+      - relation: "isDefinedBy" # dataelement -> business term
+        to: "urn:bt:AccountStatus"
+      - relation: "tiesToValidValues" # term -> enum
+        to: "urn:enum:account_status"
+      - relation: "orgOntology"
+        to: "urn:ontology:chase-deposit"
+  - start: "urn:de:accounts:customer_id"
+    steps:
+      - relation: "joinsTo"
+        to: "urn:de:customers:customer_id"
+      - relation: "datasetOf"
+        to: "urn:ds:core:customers"
+      - relation: "modelOf"
+        to: "urn:dm:ccb:customer360"
+      - relation: "orgOf"
+        to: "urn:org:CCB"
+      - relation: "extendsOntology"
+        to: "urn:ontology:fibo-core"
