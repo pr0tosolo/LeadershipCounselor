@@ -36,8 +36,13 @@ def test_builder_parses_sample_graph(tmp_path: Path) -> None:
     relationships = {(rel.rel_type, rel.start_uri, rel.end_uri) for rel in graph_data.relationships}
     assert (
         "SUBCLASS_OF",
+        "http://example.com/Customer",
+        "http://example.com/Agent",
+    ) in relationships
+    assert (
+        "SUBCLASS_OF",
+        "http://example.com/DepositoryAccount",
         "http://example.com/Account",
-        "http://example.com/Thing",
     ) in relationships
     assert (
         "HAS_DOMAIN",
