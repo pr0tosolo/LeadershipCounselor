@@ -1,0 +1,29 @@
+@prefix ex: <http://example.com/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+ex:Thing a owl:Class ;
+    rdfs:label "Thing"@en .
+
+ex:Account a owl:Class ;
+    rdfs:label "Account"@en ;
+    rdfs:comment "Represents an account." ;
+    rdfs:subClassOf ex:Thing .
+
+ex:hasAccount a owl:ObjectProperty ;
+    rdfs:label "has account" ;
+    rdfs:domain ex:Customer ;
+    rdfs:range ex:Account ;
+    rdfs:subPropertyOf ex:relatedTo .
+
+ex:relatedTo a owl:ObjectProperty .
+
+ex:Customer a owl:Class ;
+    skos:prefLabel "Customer"@en ;
+    skos:definition "An individual or organization with an account." .
+
+ex:customer123 a owl:NamedIndividual ;
+    rdf:type ex:Customer ;
+    rdfs:label "Customer 123" .
