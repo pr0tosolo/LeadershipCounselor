@@ -4,13 +4,40 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
-ex:Thing a owl:Class ;
-    rdfs:label "Thing"@en .
+ex:Agent a owl:Class ;
+    rdfs:label "Agent"@en ;
+    rdfs:comment "Represents any party or organization that can participate in agreements." .
+
+ex:Customer a owl:Class ;
+    skos:prefLabel "Customer"@en ;
+    skos:definition "An individual or organization with an account." ;
+    rdfs:subClassOf ex:Agent .
+
+ex:BusinessCustomer a owl:Class ;
+    rdfs:label "Business Customer"@en ;
+    rdfs:subClassOf ex:Agent .
 
 ex:Account a owl:Class ;
     rdfs:label "Account"@en ;
-    rdfs:comment "Represents an account." ;
-    rdfs:subClassOf ex:Thing .
+    rdfs:comment "Represents an account." .
+
+ex:DepositoryAccount a owl:Class ;
+    rdfs:label "Depository Account"@en ;
+    rdfs:subClassOf ex:Account .
+
+ex:CheckingAccount a owl:Class ;
+    rdfs:label "Checking Account"@en ;
+    skos:definition "A bank account for day to day banking." ;
+    rdfs:subClassOf ex:DepositoryAccount .
+
+ex:Loan a owl:Class ;
+    rdfs:label "Loan"@en .
+
+ex:Product a owl:Class ;
+    rdfs:label "Product"@en .
+
+ex:Service a owl:Class ;
+    rdfs:label "Service"@en .
 
 ex:hasAccount a owl:ObjectProperty ;
     rdfs:label "has account" ;
@@ -19,10 +46,6 @@ ex:hasAccount a owl:ObjectProperty ;
     rdfs:subPropertyOf ex:relatedTo .
 
 ex:relatedTo a owl:ObjectProperty .
-
-ex:Customer a owl:Class ;
-    skos:prefLabel "Customer"@en ;
-    skos:definition "An individual or organization with an account." .
 
 ex:customer123 a owl:NamedIndividual ;
     rdf:type ex:Customer ;
